@@ -49,7 +49,7 @@
 
 - Q&A 상세보기
 
-- Q&A 작성 (진행중)
+- Q&A 작성
 
 ![db](./capture/QNA탭.PNG)
 ![db](./capture/QNA화면.PNG)
