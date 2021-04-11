@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="food">
+	<select id="searchAll" resultMap="FoodResultMap">
+		select fcode,fname,supportpereat,calory,carbo,protein,fat,sugar,natrium,chole,fattyacid,transfat,maker,img
+		from food
+	</select>
+	<select id="searchByName" parameterType="String" resultMap="FoodResultMap">
+		select fcode,fname,supportpereat,calory,carbo,protein,fat,sugar,natrium,chole,fattyacid,transfat,maker,img
+		from food
+		where fname like concat('%',#{name},'%')
+	</select>
+	<select id="searchByMaker" parameterType="String" resultMap="FoodResultMap">
+		select fcode,fname,supportpereat,calory,carbo,protein,fat,sugar,natrium,chole,fattyacid,transfat,maker,img
+		from food
+		where maker like concat('%',#{maker},'%')
+	</select>
+	<select id="searchByAll" parameterType="String" resultMap="FoodResultMap">
+		select fcode,fname,supportpereat,calory,carbo,protein,fat,sugar,natrium,chole,fattyacid,transfat,maker,img
+		from food
+		where maker like concat('%',#{stmt},'%') or fname like concat('%',#{stmt},'%')
+	</select>
+	<select id="searchFood" parameterType="int" resultMap="FoodResultMap">
+		select fcode,fname,supportpereat,calory,carbo,protein,fat,sugar,natrium,chole,fattyacid,transfat,maker,img
+		from food
+		where fcode = #{code};
+	</select>
+	<select id="searchMaterials" parameterType="int" resultType="Material">
+		select m.mname as mname, m.origin as origin
+		from food f, rawmaterial r, material m
+		where f.fcode=r.food_fcode and r.material_mname=m.mname
+		and f.fcode = #{fcode}
+	</select>
+	<insert id="insertFood" parameterType="Food">
+		insert ignore into food
+		values (#{code},#{name},#{supportpereat},#{calory},#{carbo},#{protein},#{fat},#{sugar},#{natrium},#{chole},#{fattyacid},#{transfat},#{maker},#{img})
+	</insert>
+	<insert id="insertMaterial" parameterType="Material">
+		insert ignore into material
+		values (#{mname},#{origin})
+	</insert>
+	<insert id="insertRawMaterial" parameterType="RawMaterial">
+		insert ignore into rawmaterial
+		values (#{Food_fcode},#{Material_mname})
+	</insert>
+	<insert id="insertAllergy" parameterType="String">
+		insert ignore into allergy
+		values (#{allergy_name})
+	</insert>
+	<delete id="deleteFood" parameterType="String">	<!-- type이 단일변수이면 #에 들어갈 이름 안중요 -->
+		delete from food where fcode = #{fcode}
+	</delete>
+	<update id="updateFood" parameterType="Food">
+	</update>
+	<resultMap type="Food" id="FoodResultMap">
+		<id column="fcode" property="code"/>
+		<result column="fname" property="name"/>
+		<result column="supportpereat" property="supportpereat"/>
+		<result column="calory" property="calory"/>
+		<result column="carbo" property="carbo"/>
+		<result column="protein" property="protein"/>
+		<result column="fat" property="fat"/>
+		<result column="sugar" property="sugar"/>
+		<result column="natrium" property="natrium"/>
+		<result column="chole" property="chole"/>
+		<result column="fattyacid" property="fattyacid"/>
+		<result column="transfat" property="transfat"/>
+		<result column="maker" property="maker"/>
+		<result column="img" property="img"/>
+	</resultMap>
+	
+</mapper>

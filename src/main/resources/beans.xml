@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:p="http://www.springframework.org/schema/p"
+	xmlns:c="http://www.springframework.org/schema/c"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-4.3.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.3.xsd">
+
+	<context:property-placeholder location="classpath:db.properties" />
+	<bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource"
+		p:driverClassName="${db.driver}"
+		p:url="${db.url}"
+		p:username="${db.username}"
+		p:password="${db.password}"
+	 />
+	<bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean"
+		p:configLocation="classpath:mybatis/sqlMapConfig.xml"
+		p:dataSource-ref="dataSource"
+	 />
+	<bean id="session" class="org.mybatis.spring.SqlSessionTemplate" c:sqlSessionFactory-ref="sqlSessionFactory" />
+	
+	<bean id="foodDao" class="com.ssafy.model.dao.FoodDaoImpl" p:session-ref="session"/>
+	<bean id="foodService" class="com.ssafy.model.service.FoodServiceImpl" p:foodDao-ref="foodDao"/>
+	
+	<bean id="userDao" class="com.ssafy.model.dao.UserDAOImpl" p:session-ref="session"/>
+	<bean id="userService" class="com.ssafy.model.service.UserServiceImpl" p:userDao-ref="userDao"/>
+</beans>

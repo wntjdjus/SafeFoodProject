@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE configuration
+  PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-config.dtd">
+<configuration>
+	<!-- vo 부분 -->
+	<typeAliases>
+		<typeAlias type="com.ssafy.model.vo.Food" alias="Food"/>
+		<typeAlias type="com.ssafy.model.vo.User" alias="User"/>
+		<typeAlias type="com.ssafy.model.vo.Material" alias="Material"/>
+		<typeAlias type="com.ssafy.model.vo.RawMaterial" alias="RawMaterial"/>
+		<typeAlias type="com.ssafy.model.vo.UserAllergy" alias="UserAllergy"/>
+		<typeAlias type="com.ssafy.model.vo.Recoding" alias="Recoding"/>
+		<typeAlias type="com.ssafy.model.vo.Question" alias="Question"/>
+		<typeAlias type="com.ssafy.model.vo.Answer" alias="Answer"/>
+	</typeAliases>
+	
+	<!-- mapper 부분 -->
+	<mappers>
+		<mapper resource="mapper/Food.xml"/>
+		<mapper resource="mapper/User.xml"/>
+	</mappers>
+</configuration>

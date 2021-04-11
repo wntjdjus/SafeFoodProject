@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html>
+<head>
+ <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+ <title>Insert title here</title>
+ <script src="https://unpkg.com/vue"></script>
+ <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+ <script src="https://unpkg.com/vue-router/dist/vue-router.js"></script>
+</head>
+<body>
+	<div id="app">
+		<div style="width:700px; float:left">
+			<div id="list" >
+				<table border="1" style="width:700px;">
+					<thead>
+						<tr>
+							<th>번호</th>
+							<th>제목</th>
+							<th>작성자</th>
+							<th>답변여부</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr v-for="board in boards">
+			 				<td>{{board.qnum}}</td>
+			 				<td><router-link to = "/detail"><span v-on:click="getBoard(board.qnum)">{{board.title}}</span></router-link></td>
+							<td>{{board.uid}}</td>
+							<td v-if="board.isanswer == 1">Y</td>
+							<td v-else>N</td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+			<div>
+				<table>
+					<tr>
+						<!-- <td><input type="hidden" v-on:click="getBoards(1)">1</td> -->
+						<td>1</td>
+						<td>2</td>
+						<td>3</td>
+						<td>4</td>
+						<td>5</td>
+						<td>6</td>
+						<td>7</td>
+					</tr>
+				</table>
+			</div>
+			<div>
+				<router-link to = "/add">글쓰기</router-link>
+			</div>
+		</div>
+		
+		<div style="width:700px; float:left; border:1px solid black">
+			<router-view></router-view>
+		</div>
+	</div>
+
+	<script type="text/x-template" id="addTemplate">
+		<div id = "addBoard">
+			제목 : <input type="text" value = "title" /> <br/>
+			작성자 : <input type="text" value = "author" /> <br/>
+			내용 : <textarea rows="10" cols="70" value = "content"></textarea> <br/>
+			<input type="button" value="등록" @click="addBoard"/>
+			<input type="button" value="취소" @click="gotoList"/>
+		</div>
+	</script>
+
+	<script type="text/x-template" id="detailTemplate">
+		<div id="detailBoard">
+			번호 : <input type="text" v-model="board.qnum" readonly="readonly"/> <br/>
+			제목 : <input type="text" v-model="board.title"/> <br/>
+			작성날짜 : <input type="text" v-model="board.qdate"/> <br/>
+			내용 : <textarea rows="10" cols="70" v-model="board.describtion"></textarea><br/>
+			
+			<div v-show="board.isanswer == 0">
+				답변 : <textarea rows="7" cols="70" v-model="answer" readonly="readonly"/><br/>
+			</div>
+			
+			<div v-show="board.id == '1111'">
+				<input type="button" value="수정" @click="modifyBoard(board.qnum)"/>
+				<input type="button" value="삭제" @click="removeBoard(board.qnum)"/>
+			</div>
+			
+			<input type="button" value="취소" @click="gotoList"/>
+		</div>
+	</script>
+
+	<script type="text/javascript">
+
+		
+ 				
+		
+		var addhrm = Vue.component('addhrm',{
+		    template: '#addTemplate'
+		});
+		var detailhrm = Vue.component('detailhrm',{
+		    template: '#detailTemplate'
+		});
+		
+		const routes = [
+		   { path: '/add', component: addhrm },
+		   { path: '/detail', component: detailhrm }
+		]; 
+		const router = new VueRouter({
+			   routes : routes
+			});
+
+ 		let list = new Vue({
+			el : "#app",
+			router,
+			data :{
+				boards:[],
+				board : {}
+			},
+			methods : {
+				getBoards(){
+					let self = this;
+					axios.get("http://70.12.240.110:8080/rest/questions")
+					.then( response =>{
+							self.boards = response.data;
+							}
+						)				
+				},
+				getBoard:function(qnum){
+					axios.get("http://70.12.240.110:8080/rest/questions" + qnum)
+						.then( response =>{
+								this.board = response.data;							
+								}
+							)
+				},
+				addBoard:function(qnum){
+					axios.post("http://70.12.240.110:8080/rest/questions")
+				},
+				gotoList:function(qnum){
+					axios.get("http://70.12.240.110:8080/rest/questions")
+					.then( response =>{
+							self.boards = response.data;
+							}
+						)
+				}
+			},
+			created(){
+				this.getBoards();
+			},
+			mounted(){
+				this.getBoards();
+			}
+		});		
+	</script>
+</body>
+</html>
+
+
+	<script type="text/x-template" id="addhrmtemplate">
+		<div id = "addBoard">
+			제목 : <input type="text" v-model="board.title"/> <br/>
+			작성자 : <input type="text" v-model="board.name" /> <br/>
+			내용 : <textarea rows="10" cols="70" v-model="board.content"></textarea> <br/>
+			<input type="button" value="등록" @click="addBoard"/>
+			<input type="button" value="취소" @click="gotoList"/>
+		</div>
+	</script>
+	
+	<script type="text/x-template" id="detailTemplate">
+
+	</script>
+
+	
+	
+	
+	
+	
+	
